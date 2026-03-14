@@ -31,6 +31,7 @@ Skip this step only when explicitly told "build from scratch" or "no library sea
 - Subagents should generally be isolated in worktrees
 - **Worktree location**: Always create worktrees under `.claude/worktrees/`, never in the repo root — keeps the project directory clean
 - **Never `rm -rf` a worktree** — always use `git worktree remove` instead. **Never** `git worktree remove` a Claude-managed worktree (`.claude/worktrees/`) — those are cleaned up automatically on session/agent exit.
+- **Subagent verification mandate**: Every subagent must run the full test and lint suite before reporting completion. A subagent that reports "done" without passing all checks has not completed its task. The main agent must verify subagent claims — never trust "tests pass" without evidence (test command output or CI results).
 
 ## Self-Improvement Loop
 
@@ -38,10 +39,21 @@ Skip this step only when explicitly told "build from scratch" or "no library sea
 - Write rules for yourself that prevent the same class of mistake
 - Review relevant lessons at session start
 
-## Verification Before Done
+## Verification Gate
 
-- Never mark a task complete without proving it works
-- Diff behavior between main and your changes when relevant
+**This is an absolute requirement. No code merges, no task closes, no "done" status without passing this gate.**
+
+Before marking ANY task complete — whether you are a main agent or a subagent:
+
+1. **Run the full test suite** and confirm zero failures. Not "the tests I wrote" — all tests.
+2. **Run the linter** and confirm zero warnings.
+3. **Run the build** and confirm it succeeds.
+4. **Diff behavior** between main and your changes when relevant — confirm no regressions.
+5. **Report the actual output** of test/lint/build commands. Stating "tests pass" without running them is a lie, not a shortcut.
+
+If any check fails: fix it, re-run all checks, and only then declare done.
+
+If checks cannot run in the current environment (missing dependencies, no database): this is a blocking problem. Solve it or escalate — do not skip verification.
 
 ## Demand Elegance (Balanced)
 
