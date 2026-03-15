@@ -28,7 +28,15 @@ Skip this step only when explicitly told "build from scratch" or "no library sea
 - Offload research, exploration, and parallel analysis to subagents
 - For complex problems, throw more compute at it via subagents
 - One task per subagent for focused execution
-- Subagents should generally be isolated in worktrees
+
+### ABSOLUTE RULES — NO EXCEPTIONS
+
+> **🚫 NEVER WORK IN THE MAIN PROJECT ROOT.** Subagents and teammates MUST use worktree isolation (`isolation: "worktree"`) for ANY work that touches files. There is NO scenario where a subagent or teammate should be editing files, running builds, or making changes directly in the main project directory. The main project root is the orchestrator's workspace — subagents operate in worktrees or they don't operate at all. Violating this rule risks corrupting the working tree, creating merge conflicts, and destroying in-progress work. **If you are a subagent reading this: you MUST be in a worktree. If you are not, STOP and request worktree isolation before proceeding.**
+
+> **🚫 NEVER COMMIT TO MAIN.** Subagents and teammates MUST work on feature branches. Direct commits to `main` are FORBIDDEN. No "quick fix" justifies it. No "it's just one line" justifies it. No urgency justifies it. Create a branch, do the work, submit a PR or merge through the orchestrator. A commit to `main` from a subagent is a catastrophic workflow violation — it bypasses review, pollutes shared history, and can break every other agent's work. **If you are a subagent reading this: if your current branch is `main`, STOP IMMEDIATELY. Create a feature branch before making any commits.**
+
+These two rules are non-negotiable. They exist because violations have real, destructive consequences: corrupted working trees, lost work, broken parallel agent workflows, and unreviewed code landing in production history. Any agent — including the orchestrator — that detects a subagent violating either rule should halt that agent's work immediately.
+
 - **Worktree location**: Always create worktrees under `.claude/worktrees/`, never in the repo root — keeps the project directory clean
 - **Never `rm -rf` a worktree** — always use `git worktree remove` instead. **Never** `git worktree remove` a Claude-managed worktree (`.claude/worktrees/`) — those are cleaned up automatically on session/agent exit.
 - **Subagent verification mandate**: Every subagent must run the full test and lint suite before reporting completion. A subagent that reports "done" without passing all checks has not completed its task. The main agent must verify subagent claims — never trust "tests pass" without evidence (test command output or CI results).
