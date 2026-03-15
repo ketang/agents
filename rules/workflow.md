@@ -21,6 +21,7 @@ Skip this step only when explicitly told "build from scratch" or "no library sea
 - Enter plan mode for ANY non-trivial task (3+ steps or architectural decisions)
 - If something goes sideways, STOP and re-plan immediately — don't keep pushing
 - Use plan mode for verification steps, not just building
+- Treat undocumented infrastructure choices as architectural decisions — require explicit confirmation before encoding them in code or config
 
 ## Subagent Strategy
 
@@ -78,5 +79,6 @@ If checks cannot run in the current environment (missing dependencies, no databa
 ## Core Principles
 
 - **No Laziness**: Find root causes. No temporary fixes. Senior developer standards.
+- **No Infrastructure Assumptions**: Never assume a specific infrastructure provider, CI/CD system, container registry, cloud platform, or deployment target unless it is explicitly documented or stated in this project. This includes (but is not limited to) GitHub Actions, GitHub Container Registry, AWS, GCP, Azure, Docker Hub, Vercel, Fly.io, Railway, and any other vendor-specific tooling. If a task requires infrastructure decisions and none are documented, **ask before proceeding**. Do not generate configs, manifests, or code that encodes a provider choice you invented.
 - **AskUserQuestion sparingly**: Only for decisions where the wrong choice requires significant rework. For preference questions, pick a sensible default and proceed.
 - **After context compaction**: Trust the summary. Do not re-run git status, git diff, git log, or test suites that the pre-compaction portion already completed.
