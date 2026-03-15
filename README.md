@@ -1,6 +1,6 @@
 # agents
 
-Shared [Claude Code](https://claude.ai/code) rules for use across projects. Each file in `rules/` is a self-contained set of conventions that can be imported independently.
+Shared [Claude Code](https://claude.ai/code) rules and agent definitions for use across projects. Rules in `rules/` are imported into project CLAUDE.md files. Agent definitions in `agents/` are symlinked into `~/.claude/agents/` for global availability.
 
 ## Usage
 
@@ -33,6 +33,15 @@ project/
 | `rules/database.md` | PostgreSQL / pgx / Goose migration patterns |
 | `rules/beads.md` | Beads issue tracking, git workflow, plans |
 
+## Available Agents
+
+| File | Model | Purpose |
+|---|---|---|
+| `agents/planner.md` | Opus | Task decomposition, model tagging, swarm-consumable output |
+| `agents/task-coder.md` | Sonnet | Execute well-defined tasks with escalation and output control |
+
+Agent definitions are `.md` files with YAML frontmatter that Claude Code discovers in `~/.claude/agents/`. Symlink or copy individual files there to make them available.
+
 ## Setup
 
 Clone this repo alongside your projects:
@@ -42,4 +51,4 @@ cd ~/project  # or wherever your projects live
 git clone git@github.com:ketang/agents.git
 ```
 
-Then add `@import` lines to your project's `CLAUDE.md`.
+Then add `@import` lines to your project's `CLAUDE.md` for rules, and symlink agent definitions into `~/.claude/agents/`.
