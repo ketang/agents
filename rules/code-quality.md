@@ -21,6 +21,28 @@ Comments explain **why** or document **non-obvious contracts** — never restate
 
 **The delete test:** If you can delete a comment and the code is equally clear, delete it.
 
+## No Unused Code
+
+Dead code — unused imports, unreachable branches, commented-out blocks, vestigial functions — must never be checked in. It obscures intent, triggers compiler/linter warnings, and rots over time. Temporarily commenting out code for local debugging is acceptable, but it must be removed or restored before commit.
+
+If the compiler or linter warns about unused code, the correct response is one of:
+1. **Delete it** — if the code is genuinely no longer needed.
+2. **Use it as intended** — if it was left unused due to an oversight or incomplete implementation.
+
+"Keeping it around in case we need it later" is not a valid reason — that's what version control is for.
+
+### Never Suppress Unused-Code Warnings
+
+Lint suppression directives must **never** be used to silence unused-code warnings. These directives hide the problem instead of fixing it:
+
+- **Rust**: `#[allow(dead_code)]`, `#[allow(unused_imports)]`, `#[allow(unused_variables)]`, `#[allow(unused_mut)]`, or any `#[allow(unused_*)]`
+- **TypeScript/JavaScript**: `// eslint-disable-next-line @typescript-eslint/no-unused-vars`, `// @ts-ignore` or `// @ts-expect-error` to hide unused bindings
+- **Go**: `_` assignments solely to satisfy the compiler (e.g., `_ = unusedVar`) when the variable itself should be removed
+
+Prefixing a variable with `_` (in Rust or Go) is acceptable **only** when the binding is structurally required — e.g., a destructured field you genuinely don't need, or a function parameter imposed by a trait/interface contract. It is not acceptable as a way to keep dead code around.
+
+The same principle applies to all other suppression mechanisms across languages. If a warning says code is unused, fix the root cause.
+
 ## No Magic Numbers or String Literals
 
 Define named constants for default values, timeouts, error codes, capability lists, and any value that appears in both production code and tests. Tests must reference the constant, not duplicate the literal.
