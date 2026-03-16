@@ -32,6 +32,7 @@ project/
 | `rules/graphql.md` | gqlgen (backend) + gql.tada (frontend) patterns |
 | `rules/database.md` | PostgreSQL / pgx / Goose migration patterns |
 | `rules/beads.md` | Beads issue tracking, git workflow, plans |
+| `rules/learning.md` | Knowledge tracking, error logging, self-maintenance of the knowledge system |
 
 ## Available Agents
 

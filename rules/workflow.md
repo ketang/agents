@@ -44,6 +44,8 @@ These two rules are non-negotiable. They exist because violations have real, des
 
 ## Self-Improvement Loop
 
+See `rules/learning.md` for the full knowledge management system.
+
 - After corrections that reveal a recurring pattern: update memory with the lesson
 - Write rules for yourself that prevent the same class of mistake
 - Review relevant lessons at session start
