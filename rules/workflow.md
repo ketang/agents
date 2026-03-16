@@ -78,6 +78,10 @@ If checks cannot run in the current environment (missing dependencies, no databa
 - Zero context switching required from the user
 - Ambiguous scope or multi-system impact: plan first, then fix
 
+## Git Workflow
+
+This project commits directly to `main`. Do not create pull requests or use `gh pr create`. Push commits directly after staging.
+
 ## Core Principles
 
 - **No Laziness**: Find root causes. No temporary fixes. Senior developer standards.
