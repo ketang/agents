@@ -67,13 +67,14 @@ Or copy instead of symlink if you want project-local pinning.
 Edit rule or agent files directly and commit. No branches, no PRs, no issue
 tracking.
 
-Before pushing:
+Always use this sequence:
 
 ```bash
-git pull --rebase origin main
+git commit        # commit all local work first (clean tree required for rebase)
+git pull --rebase origin main  # rebase on top of any remote changes
 git push origin main
 ```
 
-Always pull before pushing. Remote main must never advance ahead of local main.
+Never pull with staged or unstaged changes — commit first, then pull, then push.
 
 When committing, use the `commit-commands:commit` skill. Do **not** use `commit-commands:commit-push-pr` — this repo has no PRs.
