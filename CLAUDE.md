@@ -75,3 +75,5 @@ git push origin main
 ```
 
 Always pull before pushing. Remote main must never advance ahead of local main.
+
+When committing, use the `commit-commands:commit` skill. Do **not** use `commit-commands:commit-push-pr` — this repo has no PRs.
