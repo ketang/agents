@@ -1,10 +1,42 @@
 # agents
 
-Shared [Claude Code](https://claude.ai/code) rules and agent definitions for use across projects. Rules in `rules/` are imported into project CLAUDE.md files. Agent definitions in `agents/` are symlinked into `~/.claude/agents/` for global availability.
+Shared [Claude Code](https://claude.ai/code) rules and custom agent definitions
+for use across projects.
 
-## Usage
+- `rules/` are imported into project `CLAUDE.md` files via `@` directives
+- `agents/` contains custom agent definitions discovered from `~/.claude/agents/`
 
-In your project's `CLAUDE.md`, import the rules you need:
+These are two separate integration paths:
+
+- **Project-local shared rules**: each project imports files from this repo
+- **Global custom agents**: your machine exposes agent definitions from this
+  repo through `~/.claude/agents/`
+
+## Supported Project Setups
+
+### Preferred: `.agents` git submodule
+
+Add this repo to a project as a git submodule at `.agents/`, then import rules
+from that path in the project's `CLAUDE.md`:
+
+```bash
+git submodule add git@github.com:ketang/agents.git .agents
+git submodule update --init --recursive
+```
+
+```markdown
+@.agents/rules/workflow.md
+@.agents/rules/testing.md
+@.agents/rules/go.md
+```
+
+This keeps the shared rules versioned with the consuming project while avoiding
+ad hoc copies.
+
+### Optional: sibling checkout
+
+If you keep this repo checked out alongside a project, you can import rules from
+the sibling path instead:
 
 ```markdown
 @../agents/rules/workflow.md
@@ -12,12 +44,12 @@ In your project's `CLAUDE.md`, import the rules you need:
 @../agents/rules/go.md
 ```
 
-This assumes `agents` is checked out as a sibling of your project directory:
+Example layout:
 
 ```
 project/
   agents/          # this repo
-  your-project/    # your project
+  your-project/    # consuming project
 ```
 
 ## Available Rules
@@ -43,13 +75,57 @@ project/
 
 Agent definitions are `.md` files with YAML frontmatter that Claude Code discovers in `~/.claude/agents/`. Symlink or copy individual files there to make them available.
 
+## Global Agent Setup
+
+Symlink or copy individual files from `agents/` into `~/.claude/agents/` to
+make those custom agents available globally.
+
 ## Setup
 
-Clone this repo alongside your projects:
+### Sibling checkout setup
 
 ```bash
 cd ~/project  # or wherever your projects live
 git clone git@github.com:ketang/agents.git
 ```
 
-Then add `@import` lines to your project's `CLAUDE.md` for rules, and symlink agent definitions into `~/.claude/agents/`.
+Then add `@import` lines to your project's `CLAUDE.md` for rules, and symlink
+agent definitions into `~/.claude/agents/`.
+
+### Submodule setup
+
+From a consuming project:
+
+```bash
+git submodule add git@github.com:ketang/agents.git .agents
+git submodule update --init --recursive
+```
+
+Then import rules from `@.agents/rules/...` in that project's `CLAUDE.md`.
+
+## Troubleshooting
+
+### `@.agents/...` imports do not resolve
+
+The project-local `.agents` submodule is probably missing or uninitialized. Run:
+
+```bash
+git submodule update --init --recursive
+```
+
+### The project resolves imports but shared-rule changes look stale
+
+The consuming project is pinned to an older submodule commit. To move its
+`.agents` submodule to the latest `main` from this repo:
+
+```bash
+git submodule update --remote --merge .agents
+```
+
+Then commit the updated submodule pointer in the consuming project.
+
+### Custom agents are missing globally
+
+Check that `~/.claude/agents/` contains symlinks or copies of the desired files
+from `agents/`. Project-local rule imports and global custom-agent discovery are
+independent.

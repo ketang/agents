@@ -39,6 +39,7 @@ Skip this step only when explicitly told "build from scratch" or "no library sea
 These two rules are non-negotiable. They exist because violations have real, destructive consequences: corrupted working trees, lost work, broken parallel agent workflows, and unreviewed code landing in production history. Any agent — including the orchestrator — that detects a subagent violating either rule should halt that agent's work immediately.
 
 - **Worktree location**: Always create worktrees under `.claude/worktrees/`, never in the repo root — keeps the project directory clean
+- **Worktree dependency bootstrap**: For Node/TypeScript projects, a fresh worktree may not have usable dependency links yet. Before debugging missing modules or broken `tsc`/lint/test resolution, run `pnpm install` in that worktree.
 - **Never `rm -rf` a worktree** — always use `git worktree remove` instead. **Never** `git worktree remove` a Claude-managed worktree (`.claude/worktrees/`) — those are cleaned up automatically on session/agent exit.
 - **Subagent verification mandate**: Every subagent must run the full test and lint suite before reporting completion. A subagent that reports "done" without passing all checks has not completed its task. The main agent must verify subagent claims — never trust "tests pass" without evidence (test command output or CI results).
 

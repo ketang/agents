@@ -17,6 +17,7 @@ efficiently and correctly.
    ```bash
    pwd && git branch --show-current
    ```
+4. In Node/TypeScript projects, make sure dependencies are installed in the current worktree before debugging module resolution problems. A fresh worktree may need `pnpm install` before `tsc`, tests, lint, or editor tooling can resolve modules correctly.
 
 ## Implementation
 
