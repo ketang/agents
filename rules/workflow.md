@@ -81,7 +81,16 @@ If checks cannot run in the current environment (missing dependencies, no databa
 
 ## Git Workflow
 
-This project commits directly to `main`. Do not create pull requests or use `gh pr create`. Push commits directly after staging.
+This project commits directly to `main`. Do not create pull requests or use `gh pr create`.
+
+Before pushing, always sync local main with remote to prevent divergence:
+
+```bash
+git pull --rebase origin main
+git push origin main
+```
+
+Never push without pulling first. If the pull fails due to conflicts, resolve them before pushing. This applies to the orchestrator and any agent with push access — remote main must never advance ahead of local main.
 
 ## Core Principles
 

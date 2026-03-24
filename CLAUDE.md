@@ -13,11 +13,47 @@ build system, and no tests.
 
 ## How consuming projects use this repo
 
-- Preferred: add this repo as a `.agents` git submodule and import rules from
-  `@.agents/rules/...`
-- Optional: keep a sibling checkout and import rules from `@../agents/rules/...`
-- Separately, symlink or copy files from `agents/` into `~/.claude/agents/` to
-  make custom agents available globally
+### Submodule setup (preferred)
+
+```bash
+# From the consuming project root
+git submodule add <this-repo-url> .agents
+git submodule update --init --recursive
+```
+
+Then import rules in the consuming project's `CLAUDE.md`:
+
+```
+@.agents/rules/workflow.md
+@.agents/rules/beads.md
+# ...add whichever rules apply
+```
+
+To update to the latest rules:
+
+```bash
+git submodule update --remote .agents
+git add .agents
+git commit -m "update agents submodule"
+```
+
+### Sibling checkout (alternative)
+
+Keep a checkout at `../agents` relative to the consuming project and import:
+
+```
+@../agents/rules/workflow.md
+```
+
+### Custom agents
+
+To make custom agents available to Claude Code globally:
+
+```bash
+ln -sf "$(pwd)/.agents/agents/<agent-name>.md" ~/.claude/agents/
+```
+
+Or copy instead of symlink if you want project-local pinning.
 
 ## What does NOT live here
 
@@ -29,4 +65,13 @@ build system, and no tests.
 ## Contributing
 
 Edit rule or agent files directly and commit. No branches, no PRs, no issue
-tracking. Push to `main`.
+tracking.
+
+Before pushing:
+
+```bash
+git pull --rebase origin main
+git push origin main
+```
+
+Always pull before pushing. Remote main must never advance ahead of local main.
