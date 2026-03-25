@@ -12,7 +12,8 @@ efficiently and correctly.
 ## Pre-flight
 
 1. Read CLAUDE.md and AGENTS.md for project conventions
-2. If a beads issue is referenced: `bd show <id>`, then `bd update <id> --status in_progress`
+2. If an issue is referenced: inspect it in the project's documented tracker,
+   then mark it in progress if that tracker supports status updates
 3. If in a worktree, verify location:
    ```bash
    pwd && git branch --show-current
@@ -50,5 +51,5 @@ Report what you found and what decisions are needed. Do not guess.
 
 1. Verify quality gates pass
 2. Push branch
-3. Close issue if applicable: `bd close <id>`
+3. Close the issue if applicable using the project's documented tracker workflow
 4. Report: what changed, which files, quality gate results

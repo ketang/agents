@@ -63,7 +63,7 @@ project/
 | `rules/react-vite.md` | React / TypeScript / Vite / Mantine conventions |
 | `rules/graphql.md` | gqlgen (backend) + gql.tada (frontend) patterns |
 | `rules/database.md` | PostgreSQL / pgx / Goose migration patterns |
-| `rules/beads.md` | Beads issue tracking, git workflow, plans |
+| `rules/beads.md` | Issue tracker policy, git workflow, plans |
 | `rules/learning.md` | Knowledge tracking, error logging, self-maintenance of the knowledge system |
 
 ## Available Agents

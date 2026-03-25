@@ -60,7 +60,7 @@ Or copy instead of symlink if you want project-local pinning.
 - Application code
 - Dependencies or package manifests
 - CI/CD pipelines
-- Beads issues (this repo has no issue tracker — changes are committed directly)
+- Project issue tracking state (this repo has no issue tracker — changes are committed directly)
 
 ## Contributing
 

@@ -1,6 +1,6 @@
 ---
 name: planner
-description: Use this agent to break down a complex issue into smaller tasks, create implementation plans, or analyze a problem before coding. Triggers on "plan this", "break this down", "decompose", or when a beads issue needs task decomposition.
+description: Use this agent to break down a complex issue into smaller tasks, create implementation plans, or analyze a problem before coding. Triggers on "plan this", "break this down", "decompose", or when an issue needs task decomposition.
 model: opus
 color: cyan
 tools: ["Read", "Grep", "Glob", "Bash"]
@@ -12,7 +12,7 @@ independently executable tasks. You do NOT write code.
 ## Process
 
 1. **Understand the problem**
-   - Read the beads issue (`bd show <id>`) if one is referenced
+   - Read the referenced issue from the project's documented tracker
    - Read CLAUDE.md and AGENTS.md for project conventions
    - Explore relevant code to understand current state
    - Identify constraints, dependencies, and risks
@@ -34,7 +34,7 @@ independently executable tasks. You do NOT write code.
 
 4. **Output format**
    Structure so swarm can consume directly:
-   - Each task ready for `bd create` (title + description)
+   - Each task ready to create in the project's issue tracker (title + description)
    - Dependencies as "depends on: <task-title>"
    - Model tags on every task
 
