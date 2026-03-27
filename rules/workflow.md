@@ -93,17 +93,19 @@ If checks cannot run in the current environment (missing dependencies, no databa
 
 ## Git Workflow
 
-This project commits directly to `main`. Do not create pull requests or use `gh pr create`.
+This project merges directly to `main`, but development commits must be made on feature branches attached to worktrees. Do not commit on `main`. Do not create pull requests or use `gh pr create` unless explicitly instructed.
 
 Always use this sequence — no exceptions:
 
 ```bash
-git commit        # commit all local work first (clean tree required for rebase)
-git pull --rebase origin main  # rebase local commits on top of any remote changes
-git push origin main
+git commit                  # commit local work on your feature branch first
+git fetch origin
+git rebase origin/main      # replay branch commits on top of the latest main
+git push --force-with-lease # update the branch after rebasing
+# merge to main through the project's normal direct-to-main flow
 ```
 
-Never pull with staged or unstaged changes — commit first. Never push without pulling first. If the rebase has conflicts, resolve them before pushing. This applies to the orchestrator and any agent with push access — remote main must never advance ahead of local main.
+Never rebase with staged or unstaged changes — commit first. Never merge stale branch work without first rebasing onto `origin/main`. If the rebase has conflicts, resolve them before pushing or merging.
 
 ## Core Principles
 
