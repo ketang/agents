@@ -25,6 +25,14 @@ Skip this step only when explicitly told "build from scratch" or "no library sea
 
 ## Subagent Strategy
 
+### Agent Naming
+
+**Orchestrators and team leads** (agents invoked directly by the user) MUST run `/rename <descriptive-task-name>` immediately upon starting a task — before any other work. This allows the user to resume the session after a crash or reboot. The name should describe the task, e.g., `auth-refactor`, `fix-login-bug`, `migrate-db-schema`.
+
+**Subagents and teammates** (agents spawned by an orchestrator) must be given names that make their role unambiguous so the user knows not to attempt to resume those sessions. Use a `sub/` or `team/` prefix in the `name` parameter when invoking the Agent tool:
+- Subagents: `sub/research-auth-libraries`, `sub/run-tests`, `sub/explore-schema`
+- Teammates: `team/implement-api`, `team/write-tests`, `team/review-output`
+
 - Use subagents liberally to keep the main context window clean
 - Offload research, exploration, and parallel analysis to subagents
 - For complex problems, throw more compute at it via subagents
