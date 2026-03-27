@@ -59,6 +59,10 @@ See `rules/learning.md` for the full knowledge management system.
 - Write rules for yourself that prevent the same class of mistake
 - Review relevant lessons at session start
 
+## Scope Enforcement at Merge Time
+
+When reviewing a teammate's completed work, diff the branch against main and verify every changed file is in scope. A plan review that rejected a specific step must be enforced at merge — if the out-of-scope files appear anyway, send the teammate back to revert them before merging. Do not accept scope creep because the code is correct.
+
 ## Verification Gate
 
 **This is an absolute requirement. No code merges, no task closes, no "done" status without passing this gate.**

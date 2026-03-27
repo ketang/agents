@@ -43,6 +43,12 @@ Prefixing a variable with `_` (in Rust or Go) is acceptable **only** when the bi
 
 The same principle applies to all other suppression mechanisms across languages. If a warning says code is unused, fix the root cause.
 
+## Issue Scope Discipline
+
+Only modify files that are directly required by the assigned issue. Do not make "while I'm here" changes to unrelated files, even if the change is correct and useful.
+
+Before committing, review every changed file and ask: "is this change required by my issue?" If not, revert it. Incidental improvements belong in separate issues — create one and move on.
+
 ## No Magic Numbers or String Literals
 
 Define named constants for default values, timeouts, error codes, capability lists, and any value that appears in both production code and tests. Tests must reference the constant, not duplicate the literal.
