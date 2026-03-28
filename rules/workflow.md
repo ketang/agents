@@ -86,7 +86,9 @@ If checks cannot run in the current environment (missing dependencies, no databa
 
 ## Autonomous Bug Fixing
 
-- When given a bug report with clear reproduction: first write an automated test that reproduces the bug, then fix it
+- When given a bug report with clear reproduction: first write an automated regression test that reproduces the bug and fails against the current code
+- Do not implement the bug fix until that failing regression test exists
+- After the failing regression test is in place, implement the fix and verify the regression test passes
 - Point at logs, errors, failing tests — then resolve them
 - Zero context switching required from the user
 - Ambiguous scope or multi-system impact: plan first, then fix

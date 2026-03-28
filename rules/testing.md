@@ -9,7 +9,7 @@ Every agent — main or subagent — must run the full test and lint suite befor
 - **Always write tests for new additions.** Tests ship with the code, not as a follow-up.
 - **Update existing tests when modifying behaviour.**
 - **Target >= 80% line coverage per package.** Glue/wiring packages are exempt.
-- **Bug fixes require a reproduction test first** — write an automated test that demonstrates the bug (must fail), then fix the code and verify the test passes. Never attempt a fix without a failing test.
+- **Bug fixes require a failing regression test before any fix is implemented** — first write an automated regression test that reproduces the bug and fails in the current codebase. Only after that failing test exists may you implement the fix, then verify the regression test passes. Never attempt or commit a bug fix without a failing reproduction test.
 
 ## Test Quality
 
