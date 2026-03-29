@@ -24,7 +24,8 @@ git submodule update --init --recursive
 Then import rules in the consuming project's `CLAUDE.md`:
 
 ```
-@.agents/rules/workflow.md
+@.agents/rules/workflow-common.md
+@.agents/rules/workflow-prs.md            # or workflow-direct-main.md
 @.agents/rules/beads.md
 # ...add whichever rules apply
 ```
@@ -42,7 +43,8 @@ git commit -m "update agents submodule"
 Keep a checkout at `../agents` relative to the consuming project and import:
 
 ```
-@../agents/rules/workflow.md
+@../agents/rules/workflow-common.md
+@../agents/rules/workflow-prs.md          # or workflow-direct-main.md
 ```
 
 ### Custom agents
@@ -62,6 +64,14 @@ Or copy instead of symlink if you want project-local pinning.
 - CI/CD pipelines
 - Project issue tracking state (this repo has no issue tracker — changes are committed directly)
 
+## Scope of These Instructions
+
+This `CLAUDE.md` governs changes to the `agents` repository itself.
+
+The files under `rules/` are shared instructions for consuming projects. Those
+rules are templates for project-local workflows and must be interpreted in the
+context of the consuming project's documented process.
+
 ## Contributing
 
 Edit rule or agent files directly and commit. No branches, no PRs, no issue
@@ -70,11 +80,13 @@ tracking.
 Always use this sequence:
 
 ```bash
+git branch --show-current  # verify you are on main
 git commit        # commit all local work first (clean tree required for rebase)
 git pull --rebase origin main  # rebase on top of any remote changes
 git push origin main
 ```
 
 Never pull with staged or unstaged changes — commit first, then pull, then push.
+Never push before confirming you are on `main`.
 
 When committing, use the `commit-commands:commit` skill. Do **not** use `commit-commands:commit-push-pr` — this repo has no PRs.

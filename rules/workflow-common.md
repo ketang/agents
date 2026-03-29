@@ -2,17 +2,13 @@
 
 ## Scope
 
-This file is the legacy combined workflow for consuming projects that already
-import `rules/workflow.md`.
+This file is shared guidance for consuming projects that import it from the
+`agents` repository.
 
-For new consuming projects, prefer the split workflow files instead:
+Import this file together with exactly one integration-specific workflow file:
 
-- `rules/workflow-common.md`
-- `rules/workflow-prs.md` for pull-request-based integration
-- `rules/workflow-direct-main.md` for direct merges to `main`
-
-This legacy file remains available for compatibility. It does not override a
-consuming project's documented workflow choices.
+- `rules/workflow-prs.md` for projects that integrate branch work through pull requests
+- `rules/workflow-direct-main.md` for projects that merge verified branch work directly into `main`
 
 ## Build vs Buy
 
@@ -106,47 +102,6 @@ If checks cannot run in the current environment (missing dependencies, no databa
 - Point at logs, errors, failing tests — then resolve them
 - Zero context switching required from the user
 - Ambiguous scope or multi-system impact: plan first, then fix
-
-## Git Workflow
-
-Unless the consuming project explicitly documents a different local rule,
-development commits should be made on feature branches attached to worktrees.
-Do not commit development work on `main`.
-
-If the consuming project uses pull requests:
-
-```bash
-git commit                  # commit local work on your feature branch first
-git fetch origin
-git rebase origin/main      # replay branch commits on top of the latest main
-git push --force-with-lease # update the branch after rebasing
-gh pr create                # or the project's documented PR creation flow
-```
-
-Open the PR only after the branch is rebased onto `origin/main` and passes the
-project's verification requirements. Follow the project's documented review and
-merge rules after that.
-
-If the consuming project merges directly to `main` without pull requests:
-
-```bash
-git commit                  # commit local work on your feature branch first
-git fetch origin
-git rebase origin/main      # replay branch commits on top of the latest main
-git push --force-with-lease # update the branch after rebasing
-git checkout main
-git pull --ff-only origin main
-git merge --no-ff <feature-branch>   # always create a merge commit
-git push origin main
-```
-
-Never rebase with staged or unstaged changes — commit first. Never merge stale
-branch work without first rebasing onto `origin/main`. If the project merges
-branches directly into `main`, never fast-forward a feature branch into `main`:
-do not use `git merge --ff`, `git merge --ff-only`, or rely on the default
-fast-forward behavior. Every direct branch integration into `main` must use
-`git merge --no-ff` so the merge commit preserves branch history. If the rebase
-has conflicts, resolve them before opening the PR or merging.
 
 ## Core Principles
 

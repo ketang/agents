@@ -2,7 +2,10 @@
 
 This file keeps the historical `beads.md` path for compatibility, but the
 policy is tracker-agnostic. Each consuming project must document which issue
-tracker it uses and the canonical commands or URLs for that tracker.
+tracker it uses, the canonical commands or URLs for that tracker, and whether
+it integrates branch work through pull requests or direct merges. Prefer
+`rules/workflow-common.md` plus the matching integration-specific workflow file
+for new projects.
 
 ## Issue Tracking
 
@@ -43,11 +46,19 @@ single-issue lookups when the tracker tooling supports it.
 
 ## Git Workflow
 
-When work is complete and verified, merge directly into `main` from the command line using an explicit merge commit. Do not create pull requests unless there is an unresolvable merge problem.
+If the consuming project uses pull requests, open a PR using the project's
+documented flow after the branch is complete, verified, and rebased onto the
+latest `origin/main`.
 
-**Before `git merge`**: Always run `git branch --show-current` to verify you are on main. If not, `git checkout main` first.
+If the consuming project merges directly to `main`, merge from the command line
+using an explicit merge commit.
 
-**Merge policy**: Always merge completed work with `git merge --no-ff <feature-branch>`. Never fast-forward branch merges into `main`.
+**Before `git merge` in direct-merge projects**: Always run
+`git branch --show-current` to verify you are on main. If not, `git checkout main` first.
+
+**Merge policy for direct-merge projects**: Always merge completed work with
+`git merge --no-ff <feature-branch>`. Never fast-forward branch merges into
+`main`.
 
 **No cherry-picking**: Never use `git cherry-pick`. If you need a change from another branch, merge or rebase instead. Cherry-picking creates duplicate commits, breaks bisect, and obscures history.
 
