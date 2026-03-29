@@ -95,7 +95,7 @@ If checks cannot run in the current environment (missing dependencies, no databa
 
 ## Git Workflow
 
-This project merges directly to `main`, but development commits must be made on feature branches attached to worktrees. Do not commit on `main`. Do not create pull requests or use `gh pr create` unless explicitly instructed.
+This project integrates completed work by merging into `main` from the command line, but implementation work must happen on a dedicated feature branch, ideally in its own worktree. Commit and verify on that branch first. Do not commit implementation work on `main`. Do not create pull requests or use `gh pr create` unless explicitly instructed.
 
 Always use this sequence — no exceptions:
 
@@ -106,7 +106,7 @@ git rebase origin/main      # replay branch commits on top of the latest main
 git push --force-with-lease # update the branch after rebasing
 git checkout main
 git pull --ff-only origin main
-git merge --no-ff <feature-branch>   # always create a merge commit
+git merge --no-ff <feature-branch>   # integrate the finished branch with a merge commit
 git push origin main
 ```
 
