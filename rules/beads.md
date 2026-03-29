@@ -43,9 +43,11 @@ single-issue lookups when the tracker tooling supports it.
 
 ## Git Workflow
 
-When work is complete and verified, merge directly into `main` from the command line. Do not create pull requests unless there is an unresolvable merge problem.
+When work is complete and verified, merge directly into `main` from the command line using an explicit merge commit. Do not create pull requests unless there is an unresolvable merge problem.
 
 **Before `git merge`**: Always run `git branch --show-current` to verify you are on main. If not, `git checkout main` first.
+
+**Merge policy**: Always merge completed work with `git merge --no-ff <feature-branch>`. Never fast-forward branch merges into `main`.
 
 **No cherry-picking**: Never use `git cherry-pick`. If you need a change from another branch, merge or rebase instead. Cherry-picking creates duplicate commits, breaks bisect, and obscures history.
 

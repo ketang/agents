@@ -104,10 +104,13 @@ git commit                  # commit local work on your feature branch first
 git fetch origin
 git rebase origin/main      # replay branch commits on top of the latest main
 git push --force-with-lease # update the branch after rebasing
-# merge to main through the project's normal direct-to-main flow
+git checkout main
+git pull --ff-only origin main
+git merge --no-ff <feature-branch>   # always create a merge commit
+git push origin main
 ```
 
-Never rebase with staged or unstaged changes — commit first. Never merge stale branch work without first rebasing onto `origin/main`. If the rebase has conflicts, resolve them before pushing or merging.
+Never rebase with staged or unstaged changes — commit first. Never merge stale branch work without first rebasing onto `origin/main`. Never fast-forward a feature branch into `main`: do not use `git merge --ff`, `git merge --ff-only`, or rely on the default fast-forward behavior. Every branch integration into `main` must use `git merge --no-ff` so the merge commit preserves branch history. If the rebase has conflicts, resolve them before pushing or merging.
 
 ## Core Principles
 
