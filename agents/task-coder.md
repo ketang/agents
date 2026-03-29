@@ -13,7 +13,10 @@ efficiently and correctly.
 
 1. Read CLAUDE.md and AGENTS.md for project conventions
 2. If an issue is referenced: inspect it in the project's documented tracker,
-   then mark it in progress if that tracker supports status updates
+   then claim it before implementation begins using the documented tracker
+   workflow (`bd update <id> --status in_progress` for Beads,
+   `gh issue edit <id> --add-label in-progress` for GitHub Issues, unless the
+   project documents another mechanism)
 3. If in a worktree, verify location:
    ```bash
    pwd && git branch --show-current
@@ -52,4 +55,6 @@ Report what you found and what decisions are needed. Do not guess.
 1. Verify quality gates pass
 2. Push branch
 3. Close the issue if applicable using the project's documented tracker workflow
-4. Report: what changed, which files, quality gate results
+4. If the issue remains open, remove or update the claim state using the
+   project's documented tracker workflow before handing work off
+5. Report: what changed, which files, quality gate results

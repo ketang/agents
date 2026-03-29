@@ -60,21 +60,29 @@ Or copy instead of symlink if you want project-local pinning.
 - Application code
 - Dependencies or package manifests
 - CI/CD pipelines
-- Project issue tracking state (this repo has no issue tracker — changes are committed directly)
+- Project issue tracking state (this repo has no issue tracker)
 
 ## Contributing
 
-Edit rule or agent files directly and commit. No branches, no PRs, no issue
-tracking.
+This repo merges directly to `main`, but development work still happens on a
+feature branch in a dedicated worktree. Do not commit on `main`. Do not create
+pull requests unless explicitly instructed. This repo has no issue tracker, so
+rule and agent changes are tracked with branches and commits.
 
 Always use this sequence:
 
 ```bash
-git commit        # commit all local work first (clean tree required for rebase)
-git pull --rebase origin main  # rebase on top of any remote changes
+git commit                  # commit local work on your feature branch first
+git fetch origin
+git rebase origin/main      # replay branch commits on top of the latest main
+git push --force-with-lease # update the branch after rebasing
+git checkout main
+git pull --ff-only origin main
+git merge --no-ff <feature-branch>
 git push origin main
 ```
 
-Never pull with staged or unstaged changes — commit first, then pull, then push.
+Never rebase or pull with staged or unstaged changes. Commit first. Never
+fast-forward a feature branch into `main`.
 
 When committing, use the `commit-commands:commit` skill. Do **not** use `commit-commands:commit-push-pr` — this repo has no PRs.
