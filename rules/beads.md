@@ -20,11 +20,33 @@ gh issue list
 gh issue view <id>
 gh issue create --title "..." --body "..."
 gh issue edit <id> --add-label in-progress
+gh issue list --search '-label:"in-progress"'
+gh issue edit <id> --remove-label in-progress
 gh issue close <id>
 ```
 
 Projects may use Beads, GitHub Issues, or another documented tracker. Agents
 must follow the project-local tracker choice instead of assuming `beads`.
+
+### Claiming Work
+
+Agents must mark an issue as claimed before starting implementation so other
+agents do not pick the same work.
+
+- Beads: set status to `in_progress`.
+- GitHub Issues: add the `in-progress` label.
+- Another tracker: use the project's documented equivalent.
+
+When looking for work, treat Beads issues with status `in_progress` and GitHub
+issues labeled `in-progress` as unavailable unless the project documents an
+override.
+
+When work is completed, abandoned, or handed off, remove the claim using the
+tracker's documented mechanism.
+
+For GitHub Issues, prefer a dedicated `in-progress` label over assignees. Use a
+GitHub Projects status field only when the project explicitly documents it as
+the canonical workflow.
 
 ### Issue Decomposition
 
@@ -35,11 +57,13 @@ Prefer **thin end-to-end vertical slices** that deliver a complete user or agent
 Any agent doing more than a one-liner (excluding project docs updates) must
 link the work to an issue in the project's documented tracker and work in a
 dedicated feature branch + worktree. This keeps work trackable and reversible.
+Agents must claim that issue before implementation begins.
 
 ### Batch Commands
 
 When reviewing multiple issues, prefer batched or parallel reads over repetitive
 single-issue lookups when the tracker tooling supports it.
+When selecting GitHub work, prefer queries that exclude `in-progress` issues.
 
 ## Git Workflow
 
