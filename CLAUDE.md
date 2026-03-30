@@ -78,6 +78,12 @@ worktree. Do not reuse an old feature branch for a different task, and do not
 repurpose an old worktree for a different task. If follow-up work is discovered
 outside the current approved scope, start a new branch in a new worktree.
 
+Do not switch a task worktree to `main`, and do not create a separate
+"integration worktree" on `main` just to land a merge. A task worktree stays on
+its task branch. If final landing requires a checkout on `main`, use the
+project's designated primary checkout or documented landing helper instead of
+creating a new `main` worktree.
+
 When landing work in a consuming repository, prefer the shared optimistic-
 concurrency helper:
 
