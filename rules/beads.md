@@ -41,8 +41,16 @@ When looking for work, treat Beads issues with status `in_progress` and GitHub
 issues labeled `in-progress` as unavailable unless the project documents an
 override.
 
-When work is completed, abandoned, or handed off, remove the claim using the
-tracker's documented mechanism.
+When work starts, claim the issue immediately. In practice this usually means
+claiming it as soon as implementation begins on the dedicated feature branch +
+worktree for that issue.
+
+Do not close an issue just because branch work is finished. Close the issue
+only after the completed, validated changes are merged into `main`.
+
+If work is abandoned, handed off, or finishes on a branch without being merged
+into `main`, remove or update the claim using the tracker's documented
+mechanism instead of closing the issue.
 
 For GitHub Issues, prefer a dedicated `in-progress` label over assignees. Use a
 GitHub Projects status field only when the project explicitly documents it as
@@ -68,6 +76,10 @@ When selecting GitHub work, prefer queries that exclude `in-progress` issues.
 ## Git Workflow
 
 When work is complete and verified, merge directly into `main` from the command line using an explicit merge commit. Do not create pull requests unless there is an unresolvable merge problem.
+
+After the verified merge to `main` completes, close the corresponding issue
+using the project's documented tracker workflow. Do not close issues before the
+merge.
 
 **Before `git merge`**: Always run `git branch --show-current` to verify you are on main. If not, `git checkout main` first.
 

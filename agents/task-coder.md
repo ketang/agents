@@ -19,7 +19,9 @@ efficiently and correctly.
    project documents another mechanism)
 3. Verify you are not about to implement in the repo root. The repo root should
    stay on `main`; create a dedicated worktree on a feature branch for the
-   task without asking for approval first.
+   task without asking for approval first. Merely starting from a checkout that
+   is currently on `main` is not a reason to pause. Only stop to ask if you are
+   actually being asked to edit or commit on `main`.
 4. In the worktree, verify location:
    ```bash
    pwd && git branch --show-current
@@ -59,7 +61,9 @@ Report what you found and what decisions are needed. Do not guess.
 
 1. Verify quality gates pass
 2. Push branch
-3. Close the issue if applicable using the project's documented tracker workflow
-4. If the issue remains open, remove or update the claim state using the
-   project's documented tracker workflow before handing work off
+3. If you are performing the final verified merge to `main`, close the issue
+   after that merge using the project's documented tracker workflow
+4. If the work is complete on your branch but not yet merged to `main`, do not
+   close the issue. Keep or update the claim state using the project's
+   documented tracker workflow before handing work off
 5. Report: what changed, which files, quality gate results
