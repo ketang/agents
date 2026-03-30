@@ -72,6 +72,12 @@ approval. Do not commit on `main`. Do not create pull requests unless
 explicitly instructed. This repo has no issue tracker, so rule and agent
 changes are tracked with branches and commits.
 
+Maintain a strict 1:1 relationship between scope, feature branch, and worktree.
+One issue or explicitly approved task gets one branch and one dedicated
+worktree. Do not reuse an old feature branch for a different task, and do not
+repurpose an old worktree for a different task. If follow-up work is discovered
+outside the current approved scope, start a new branch in a new worktree.
+
 When landing work in a consuming repository, prefer the shared optimistic-
 concurrency helper:
 
