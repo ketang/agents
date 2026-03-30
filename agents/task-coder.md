@@ -26,7 +26,8 @@ efficiently and correctly.
    ```bash
    pwd && git branch --show-current
    ```
-5. In Node/TypeScript projects, make sure dependencies are installed in the current worktree before debugging module resolution problems. A fresh worktree may need `pnpm install` before `tsc`, tests, lint, or editor tooling can resolve modules correctly.
+5. That task worktree must remain on its task branch for the entire task. Do not switch it to `main`, and do not create a second temporary worktree on `main` for integration. If final landing requires `main`, use the project's documented merge flow rather than inventing an auxiliary `main` worktree.
+6. In Node/TypeScript projects, make sure dependencies are installed in the current worktree before debugging module resolution problems. A fresh worktree may need `pnpm install` before `tsc`, tests, lint, or editor tooling can resolve modules correctly.
 
 ## Implementation
 
