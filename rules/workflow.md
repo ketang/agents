@@ -47,6 +47,7 @@ Skip this step only when explicitly told "build from scratch" or "no library sea
 These two rules are non-negotiable. They exist because violations have real, destructive consequences: corrupted working trees, lost work, broken parallel agent workflows, and unreviewed code landing in production history. Any agent — including the orchestrator — that detects a subagent violating either rule should halt that agent's work immediately.
 
 - **Worktree location**: Always create worktrees under `.claude/worktrees/`, never in the repo root — keeps the project directory clean
+- **Strict 1:1 isolation**: Each issue, ticket, or explicitly scoped task gets exactly one feature branch and exactly one dedicated worktree. Do not reuse an existing feature branch for a different issue, and do not repurpose an existing worktree for a different issue. If new work is discovered and it is not part of the current issue's approved scope, create a new branch and a new worktree for it.
 - **Starting from `main` is not working on `main`**: Checking out a repository whose root worktree is currently on `main` does not require user approval by itself. If implementation will happen on a dedicated feature branch in its own worktree, create that branch and worktree immediately without asking. Only ask for permission if you intend to edit files, run implementation commands, or commit directly on `main`.
 - **Worktree dependency bootstrap**: For Node/TypeScript projects, a fresh worktree may not have usable dependency links yet. Before debugging missing modules or broken `tsc`/lint/test resolution, run `pnpm install` in that worktree.
 - **Never `rm -rf` a worktree** — always use `git worktree remove` instead. **Never** `git worktree remove` a Claude-managed worktree (`.claude/worktrees/`) — those are cleaned up automatically on session/agent exit.
@@ -97,6 +98,8 @@ If checks cannot run in the current environment (missing dependencies, no databa
 ## Git Workflow
 
 This project integrates completed work by merging into `main` from the command line, but implementation work must happen on a dedicated feature branch in its own worktree. Keep the repo root on `main`; do not repurpose the root checkout for implementation work. Creating the branch and worktree for that task is required workflow, not something that needs separate user approval. Commit and verify on that branch first. Do not commit implementation work on `main`. Do not create pull requests or use `gh pr create` unless explicitly instructed.
+
+Maintain a strict 1:1 relationship between task scope, feature branch, and worktree. One issue or explicitly approved task gets one branch and one worktree. After that issue lands, close out that branch/worktree pair. Any different issue, follow-up bug, or newly discovered out-of-scope work must start on a new branch in a new worktree, even if the same files are involved.
 
 Use an optimistic-concurrency lease when landing to `main`. A branch may merge only if it was verified against the exact `origin/main` commit that is still current at merge time. If `origin/main` moves during verification, abort the merge, refresh to the new tip, and re-run the gate.
 
