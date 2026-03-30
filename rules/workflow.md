@@ -40,7 +40,7 @@ Skip this step only when explicitly told "build from scratch" or "no library sea
 
 ### ABSOLUTE RULES — NO EXCEPTIONS
 
-> **🚫 NEVER WORK IN THE MAIN PROJECT ROOT.** Subagents and teammates MUST use worktree isolation (`isolation: "worktree"`) for ANY work that touches files. There is NO scenario where a subagent or teammate should be editing files, running builds, or making changes directly in the main project directory. The main project root is the orchestrator's workspace — subagents operate in worktrees or they don't operate at all. Violating this rule risks corrupting the working tree, creating merge conflicts, and destroying in-progress work. **If you are a subagent reading this: you MUST be in a worktree. If you are not, STOP and request worktree isolation before proceeding.**
+> **🚫 NEVER WORK IN THE MAIN PROJECT ROOT.** Subagents and teammates MUST use worktree isolation (`isolation: "worktree"`) for ANY work that touches files. There is NO scenario where a subagent or teammate should be editing files, running builds, or making changes directly in the main project directory. The main project root stays on `main` and is the orchestrator's workspace only — implementation work happens in a dedicated worktree on a feature branch. Creating that branch and worktree is the default path and does not require user approval. Violating this rule risks corrupting the working tree, creating merge conflicts, and destroying in-progress work. **If you are a subagent reading this: you MUST be in a worktree. If you are not, STOP and create one before proceeding.**
 
 > **🚫 NEVER COMMIT TO MAIN.** Subagents and teammates MUST work on feature branches. Direct commits to `main` are FORBIDDEN. No "quick fix" justifies it. No "it's just one line" justifies it. No urgency justifies it. Create a branch, do the work, submit a PR or merge through the orchestrator. A commit to `main` from a subagent is a catastrophic workflow violation — it bypasses review, pollutes shared history, and can break every other agent's work. **If you are a subagent reading this: if your current branch is `main`, STOP IMMEDIATELY. Create a feature branch before making any commits.**
 
@@ -95,7 +95,7 @@ If checks cannot run in the current environment (missing dependencies, no databa
 
 ## Git Workflow
 
-This project integrates completed work by merging into `main` from the command line, but implementation work must happen on a dedicated feature branch, ideally in its own worktree. Commit and verify on that branch first. Do not commit implementation work on `main`. Do not create pull requests or use `gh pr create` unless explicitly instructed.
+This project integrates completed work by merging into `main` from the command line, but implementation work must happen on a dedicated feature branch in its own worktree. Keep the repo root on `main`; do not repurpose the root checkout for implementation work. Creating the branch and worktree for that task is required workflow, not something that needs separate user approval. Commit and verify on that branch first. Do not commit implementation work on `main`. Do not create pull requests or use `gh pr create` unless explicitly instructed.
 
 Always use this sequence — no exceptions:
 
@@ -109,6 +109,8 @@ git pull --ff-only origin main
 git merge --no-ff <feature-branch>   # integrate the finished branch with a merge commit
 git push origin main
 ```
+
+Preserve the repository's configured Git transport. If the checkout or remote uses SSH and `git fetch`, `git pull`, or `git push` fails, do not switch the remote to HTTPS as a fallback. If the checkout or remote uses HTTPS, do not switch it to SSH as a fallback. Diagnose the actual auth, host, key, agent, token, or network problem instead. Only change remote transport if the user explicitly instructs it.
 
 Never rebase with staged or unstaged changes — commit first. Never merge stale branch work without first rebasing onto `origin/main`. Never fast-forward a feature branch into `main`: do not use `git merge --ff`, `git merge --ff-only`, or rely on the default fast-forward behavior. Every branch integration into `main` must use `git merge --no-ff` so the merge commit preserves branch history. If the rebase has conflicts, resolve them before pushing or merging.
 

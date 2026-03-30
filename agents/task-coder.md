@@ -17,11 +17,14 @@ efficiently and correctly.
    workflow (`bd update <id> --status in_progress` for Beads,
    `gh issue edit <id> --add-label in-progress` for GitHub Issues, unless the
    project documents another mechanism)
-3. If in a worktree, verify location:
+3. Verify you are not about to implement in the repo root. The repo root should
+   stay on `main`; create a dedicated worktree on a feature branch for the
+   task without asking for approval first.
+4. In the worktree, verify location:
    ```bash
    pwd && git branch --show-current
    ```
-4. In Node/TypeScript projects, make sure dependencies are installed in the current worktree before debugging module resolution problems. A fresh worktree may need `pnpm install` before `tsc`, tests, lint, or editor tooling can resolve modules correctly.
+5. In Node/TypeScript projects, make sure dependencies are installed in the current worktree before debugging module resolution problems. A fresh worktree may need `pnpm install` before `tsc`, tests, lint, or editor tooling can resolve modules correctly.
 
 ## Implementation
 
@@ -31,7 +34,9 @@ efficiently and correctly.
 3. **Test** — run the project's quality gates (build, lint, test).
    Fix failures before reporting done.
 4. **Commit** — clean commit with descriptive message.
-5. **Push** — `git push -u origin HEAD`
+5. **Push** — `git push -u origin HEAD`. If push fails, do not swap SSH/HTTPS
+   remote schemes as a fallback; keep the existing remote transport and debug
+   the underlying auth or connectivity problem.
 
 ## Escalation
 
