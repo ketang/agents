@@ -65,9 +65,12 @@ Or copy instead of symlink if you want project-local pinning.
 ## Contributing
 
 This repo merges directly to `main`, but development work still happens on a
-feature branch in a dedicated worktree. Do not commit on `main`. Do not create
-pull requests unless explicitly instructed. This repo has no issue tracker, so
-rule and agent changes are tracked with branches and commits.
+feature branch in a dedicated worktree. Keep the repo root on `main`; do not
+repurpose the root checkout for implementation work. Creating the branch and
+worktree for that task is required workflow and does not need separate user
+approval. Do not commit on `main`. Do not create pull requests unless
+explicitly instructed. This repo has no issue tracker, so rule and agent
+changes are tracked with branches and commits.
 
 Always use this sequence:
 
@@ -81,6 +84,13 @@ git pull --ff-only origin main
 git merge --no-ff <feature-branch>
 git push origin main
 ```
+
+Preserve the repository's configured Git transport. If the checkout or remote
+uses SSH and `git fetch`, `git pull`, or `git push` fails, do not switch the
+remote to HTTPS as a fallback. If the checkout or remote uses HTTPS, do not
+switch it to SSH as a fallback. Diagnose the actual auth, host, key, agent,
+token, or network problem instead. Only change remote transport if the user
+explicitly instructs it.
 
 Never rebase or pull with staged or unstaged changes. Commit first. Never
 fast-forward a feature branch into `main`.
