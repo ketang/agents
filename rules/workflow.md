@@ -98,7 +98,32 @@ If checks cannot run in the current environment (missing dependencies, no databa
 
 This project integrates completed work by merging into `main` from the command line, but implementation work must happen on a dedicated feature branch in its own worktree. Keep the repo root on `main`; do not repurpose the root checkout for implementation work. Creating the branch and worktree for that task is required workflow, not something that needs separate user approval. Commit and verify on that branch first. Do not commit implementation work on `main`. Do not create pull requests or use `gh pr create` unless explicitly instructed.
 
-Always use this sequence — no exceptions:
+Use an optimistic-concurrency lease when landing to `main`. A branch may merge only if it was verified against the exact `origin/main` commit that is still current at merge time. If `origin/main` moves during verification, abort the merge, refresh to the new tip, and re-run the gate.
+
+Prefer the shared helper instead of ad hoc merge commands:
+
+```bash
+bin/merge-with-lease --branch <feature-branch> --verify "<required gate>" --push
+```
+
+If the helper is imported via a submodule or sibling checkout, run it from that path:
+
+```bash
+.agents/bin/merge-with-lease --branch <feature-branch> --verify "<required gate>" --push
+../agents/bin/merge-with-lease --branch <feature-branch> --verify "<required gate>" --push
+```
+
+The helper enforces the lease flow:
+
+1. Confirm the target branch checkout is clean.
+2. Fetch `origin` and capture the lease SHA from `origin/main`.
+3. Fast-forward the current target branch to that leased base.
+4. Create a `--no-commit --no-ff` merge preview for the feature branch.
+5. Run the required verification command against that exact merged state.
+6. Re-fetch `origin` and compare the current `origin/main` SHA to the lease.
+7. Abort and retry if the lease changed; otherwise commit the merge and push.
+
+If you must execute the flow manually, always use this sequence and perform the lease re-check before committing the merge:
 
 ```bash
 git commit                  # commit local work on your feature branch first
@@ -107,13 +132,18 @@ git rebase origin/main      # replay branch commits on top of the latest main
 git push --force-with-lease # update the branch after rebasing
 git checkout main
 git pull --ff-only origin main
-git merge --no-ff <feature-branch>   # integrate the finished branch with a merge commit
+BASE_SHA=$(git rev-parse origin/main)
+git merge --no-commit --no-ff <feature-branch>
+<run required gate against the merge preview>
+git fetch origin
+test "$(git rev-parse origin/main)" = "$BASE_SHA"
+git commit --no-edit
 git push origin main
 ```
 
 Preserve the repository's configured Git transport. If the checkout or remote uses SSH and `git fetch`, `git pull`, or `git push` fails, do not switch the remote to HTTPS as a fallback. If the checkout or remote uses HTTPS, do not switch it to SSH as a fallback. Diagnose the actual auth, host, key, agent, token, or network problem instead. Only change remote transport if the user explicitly instructs it.
 
-Never rebase with staged or unstaged changes — commit first. Never merge stale branch work without first rebasing onto `origin/main`. Never fast-forward a feature branch into `main`: do not use `git merge --ff`, `git merge --ff-only`, or rely on the default fast-forward behavior. Every branch integration into `main` must use `git merge --no-ff` so the merge commit preserves branch history. If the rebase has conflicts, resolve them before pushing or merging.
+Never rebase with staged or unstaged changes — commit first. Never merge stale branch work without first rebasing onto `origin/main`. Never validate a branch against one `origin/main` SHA and merge it after `origin/main` has moved. Never fast-forward a feature branch into `main`: do not use `git merge --ff`, `git merge --ff-only`, or rely on the default fast-forward behavior. Every branch integration into `main` must use `git merge --no-ff` so the merge commit preserves branch history. If the rebase has conflicts, resolve them before pushing or merging.
 
 ## Core Principles
 

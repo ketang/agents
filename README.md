@@ -56,7 +56,7 @@ project/
 
 | File | What it covers |
 |---|---|
-| `rules/workflow.md` | Plan mode, subagents, verification, build-vs-buy, bug fixing |
+| `rules/workflow.md` | Plan mode, subagents, verification, build-vs-buy, bug fixing, merge leases |
 | `rules/testing.md` | Test standards, coverage targets, test-first bugs, completion checklist |
 | `rules/code-quality.md` | Documentation, security basics, no magic numbers, no hardcoded paths |
 | `rules/go.md` | Go conventions (error wrapping, slog, context, interfaces, SQL) |
@@ -79,6 +79,19 @@ Agent definitions are `.md` files with YAML frontmatter that Claude Code discove
 
 Symlink or copy individual files from `agents/` into `~/.claude/agents/` to
 make those custom agents available globally.
+
+## Landing Helper
+
+This repo also ships a repo-agnostic merge helper at `bin/merge-with-lease`.
+Run it from a consuming repository checkout to enforce an optimistic-
+concurrency lease on `origin/main` while verifying the exact merge preview:
+
+```bash
+.agents/bin/merge-with-lease --branch <feature-branch> --verify "<required gate>" --push
+```
+
+If the repo is checked out as a sibling instead of a submodule, invoke the same
+helper via `../agents/bin/merge-with-lease`.
 
 ## Setup
 

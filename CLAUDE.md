@@ -72,7 +72,25 @@ approval. Do not commit on `main`. Do not create pull requests unless
 explicitly instructed. This repo has no issue tracker, so rule and agent
 changes are tracked with branches and commits.
 
-Always use this sequence:
+When landing work in a consuming repository, prefer the shared optimistic-
+concurrency helper:
+
+```bash
+bin/merge-with-lease --branch <feature-branch> --verify "<required gate>" --push
+```
+
+If the helper is imported as a submodule or sibling checkout, use that path
+instead:
+
+```bash
+.agents/bin/merge-with-lease --branch <feature-branch> --verify "<required gate>" --push
+../agents/bin/merge-with-lease --branch <feature-branch> --verify "<required gate>" --push
+```
+
+That helper captures a lease on `origin/main`, verifies the exact merge preview,
+and aborts if `origin/main` moves before the merge commit is finalized.
+
+If you need to execute the sequence manually, use:
 
 ```bash
 git commit                  # commit local work on your feature branch first
@@ -81,7 +99,12 @@ git rebase origin/main      # replay branch commits on top of the latest main
 git push --force-with-lease # update the branch after rebasing
 git checkout main
 git pull --ff-only origin main
-git merge --no-ff <feature-branch>
+BASE_SHA=$(git rev-parse origin/main)
+git merge --no-commit --no-ff <feature-branch>
+<run required gate against the merge preview>
+git fetch origin
+test "$(git rev-parse origin/main)" = "$BASE_SHA"
+git commit --no-edit
 git push origin main
 ```
 
@@ -93,6 +116,7 @@ token, or network problem instead. Only change remote transport if the user
 explicitly instructs it.
 
 Never rebase or pull with staged or unstaged changes. Commit first. Never
-fast-forward a feature branch into `main`.
+validate against one `origin/main` SHA and merge after `origin/main` has moved.
+Never fast-forward a feature branch into `main`.
 
 When committing, use the `commit-commands:commit` skill. Do **not** use `commit-commands:commit-push-pr` — this repo has no PRs.
