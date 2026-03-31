@@ -1,45 +1,40 @@
 # agents
 
-Shared [Claude Code](https://claude.ai/code) rules for use across projects. Each file in `rules/` is a self-contained set of conventions that can be imported independently.
+Shared [Claude Code](https://claude.ai/code) rules for use across projects. Each file in `rules/` is a self-contained convention set that can be imported independently.
 
 ## Usage
 
-In your project's `CLAUDE.md`, import the rules you need:
+Import only the rules your project needs from its local `.agents` checkout:
 
 ```markdown
-@../agents/rules/workflow.md
-@../agents/rules/testing.md
-@../agents/rules/go.md
+@.agents/rules/workflow.md
+@.agents/rules/testing.md
+@.agents/rules/go.md
 ```
 
-This assumes `agents` is checked out as a sibling of your project directory:
+Most projects keep this repository as an in-repo git submodule at `.agents/`, which avoids a separate sibling checkout and keeps rule revisions pinned per project.
 
-```
-project/
-  agents/          # this repo
-  your-project/    # your project
-```
+If a project still uses a sibling checkout, adjust the import paths accordingly.
 
 ## Available Rules
 
 | File | What it covers |
 |---|---|
-| `rules/workflow.md` | Plan mode, subagents, verification, build-vs-buy, bug fixing |
+| `rules/workflow.md` | Planning, worktree discipline, verification, build-vs-buy, bug fixing |
 | `rules/testing.md` | Test standards, coverage targets, test-first bugs, completion checklist |
 | `rules/code-quality.md` | Documentation, security basics, no magic numbers, no hardcoded paths |
 | `rules/go.md` | Go conventions (error wrapping, slog, context, interfaces, SQL) |
 | `rules/react-vite.md` | React / TypeScript / Vite / Mantine conventions |
 | `rules/graphql.md` | gqlgen (backend) + gql.tada (frontend) patterns |
 | `rules/database.md` | PostgreSQL / pgx / Goose migration patterns |
-| `rules/beads.md` | Beads issue tracking, git workflow, plans |
+| `rules/beads.md` | Beads onboarding, issue slicing, git workflow, plans |
 
 ## Setup
 
-Clone this repo alongside your projects:
+Recommended project setup:
 
 ```bash
-cd ~/project  # or wherever your projects live
-git clone git@github.com:ketang/agents.git
+git submodule add git@github.com:ketang/agents.git .agents
 ```
 
-Then add `@import` lines to your project's `CLAUDE.md`.
+Then import the needed rule files from `.agents/` in the project's `CLAUDE.md` or equivalent agent instruction file.

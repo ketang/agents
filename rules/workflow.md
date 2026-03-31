@@ -29,6 +29,7 @@ Skip this step only when explicitly told "build from scratch" or "no library sea
 - For complex problems, throw more compute at it via subagents
 - One task per subagent for focused execution
 - Subagents should generally be isolated in worktrees
+- For non-trivial implementation work, start from a feature branch and worktree instead of editing directly on `main`
 - **Worktree location**: Always create worktrees under `.claude/worktrees/`, never in the repo root — keeps the project directory clean
 - **Never `rm -rf` a worktree** — always use `git worktree remove` instead. **Never** `git worktree remove` a Claude-managed worktree (`.claude/worktrees/`) — those are cleaned up automatically on session/agent exit.
 
